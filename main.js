@@ -25,7 +25,7 @@ async function getCurrentUser() {
 }
 
 async function fetchArticles() {
-  const { data } = await supabase.from('article').select('*').order('created_at', { ascending: false });
+  const { data } = await supabase.from('articles').select('*').order('created_at', { ascending: false });
   articles = data || [];
   renderArticles();
 }
@@ -93,7 +93,7 @@ editForm.addEventListener('submit', async (e) => {
   const author = editForm.author.value.trim() || null;
   const content = editForm.content.value.trim();
   const updated_at = new Date().toISOString();
-  await supabase.from('article').update({ title, subtitle, author, content, updated_at }).eq('id', id);
+  await supabase.from('articles').update({ title, subtitle, author, content, updated_at }).eq('id', id);
   hideModals();
   await fetchArticles();
 });
@@ -105,13 +105,13 @@ addForm.addEventListener('submit', async (e) => {
   const author = addForm.author.value.trim() || null;
   const content = addForm.content.value.trim();
   const created_at = new Date().toISOString();
-  await supabase.from('article').insert([{ title, subtitle, author, content, created_at }]);
+  await supabase.from('articles').insert([{ title, subtitle, author, content, created_at }]);
   hideModals();
   await fetchArticles();
 });
 
 async function deleteArticle(id) {
-  await supabase.from('article').delete().eq('id', id);
+  await supabase.from('articles').delete().eq('id', id);
   await fetchArticles();
 }
 
